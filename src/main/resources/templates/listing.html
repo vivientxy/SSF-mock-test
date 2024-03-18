@@ -15,46 +15,21 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Status: </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNavDarkDropdown"
-          aria-controls="navbarNavDarkDropdown"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <a class="navbar-brand" href="#">Filter by Status: </a>
         <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
           <ul class="navbar-nav">
-            <li class="nav-item dropdown">
-              <!-- <a 
-                            class="nav-link dropdown-toggle" 
-                            href="#" 
-                            id="navbarDarkDropdownMenuLink" 
-                            role="button" 
-                            data-bs-toggle="dropdown" 
-                            aria-expanded="false">
-                  Status
-                </a>
-                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                  <li><a class="dropdown-item" href="#">Pending</a></li>
-                  <li><a class="dropdown-item" href="#">Started</a></li>
-                  <li><a class="dropdown-item" href="#">In Progress</a></li>
-                  <li><a class="dropdown-item" href="#">Completed</a></li>
-                </ul> -->
-
-              <select class="form-select">
-                <option value="all">Show All</option>
-                <option value="pending">Pending</option>
-                <option value="started">Started</option>
-                <option value="in_progress">In-Progress</option>
-                <option value="completed">Completed</option>
+            <form method="post" action="/filter">
+              <select class="form-select" th:name="filter">
+                <option th:text="${#strings.capitalize(filter).replaceAll('[^A-Za-z0-9\-]', ' ')}" selected disabled hidden></option>
+                <option th:value="all">Show All</option>
+                <option th:value="pending">Pending</option>
+                <option th:value="started">Started</option>
+                <option th:value="in_progress">In progress</option>
+                <option th:value="completed">Completed</option>
               </select>
-            </li>
           </ul>
+          <button class="btn btn-secondary" type="submit">Go</button>
+        </form>
         </div>
         <a href="/add">
           <button type="button" class="btn btn-success">Add Task</button>

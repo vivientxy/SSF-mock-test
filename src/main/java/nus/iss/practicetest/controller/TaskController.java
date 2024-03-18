@@ -58,15 +58,21 @@ public class TaskController {
         ModelAndView mav = new ModelAndView("listing");
         List<Task> taskList = taskService.retrieveTasks();
         mav.addObject("tasks", taskList);
+        mav.addObject("filter", "Show All");
         return mav;
     }
 
-    // for filtering (WIP)
-    @PostMapping
+    // for filtering
+    @PostMapping(path = "/filter")
     public ModelAndView showFilteredTaskList(HttpSession sess, @RequestParam String filter) {
         ModelAndView mav = new ModelAndView("listing");
+        if (filter.equals("all")) {
+            mav.setViewName("redirect:/list");
+            return mav;
+        }
         List<Task> taskList = taskService.retrieveFilteredTasks(filter);
         mav.addObject("tasks", taskList);
+        mav.addObject("filter", filter);    // add back filter to display on dropdown
         return mav;
     }
 
