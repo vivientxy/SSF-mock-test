@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ public class TaskController {
         return mav;
     }
 
-    // for filtering
+    // for filtering (WIP)
     @PostMapping
     public ModelAndView showFilteredTaskList(HttpSession sess, @RequestParam String filter) {
         ModelAndView mav = new ModelAndView("listing");
@@ -58,46 +59,47 @@ public class TaskController {
             mav.addObject("task", task);
             return mav;
         }
-
         // if no errors, add Id and Date stamps to the object
-        task.setId(task.generateId());
-        task.setCreatedAt(task.generateCurrentDate());
-        task.setUpdatedAt(task.generateCurrentDate());
+        task.setId(taskService.generateId());
+        task.setCreatedAt(taskService.generateCurrentDate());
+        task.setUpdatedAt(taskService.generateCurrentDate());
         // add object to database
         taskService.createTask(task);
-
         // redirect to listing page
         mav.setViewName("redirect:/list");
         return mav;
     }
 
     // for updating tasks (beginning)
-    @GetMapping(path = "/update")
-    public ModelAndView showTaskToUpdate(HttpSession sess, @ModelAttribute @Valid Task task) {
-        ModelAndView mav = new ModelAndView("add");
+    @GetMapping(path = "/update/{id}")
+    public ModelAndView showTaskToUpdate(HttpSession sess, @PathVariable("id") String id) {
+        ModelAndView mav = new ModelAndView("update");
+        Task task = taskService.retrieveTask(id);
         mav.addObject("task", task);
+        System.out.println("RETRIEVED TASK: " + task.toString() + "\n" + task.getDueDate()+ "\n" + task.getCreatedAt()+ "\n" + task.getUpdatedAt());
         return mav;
     }
 
     // for updating tasks (end)
     @PostMapping(path = "/update")
     public ModelAndView updateTask(HttpSession sess, @ModelAttribute @Valid Task task, BindingResult bindings) {
+        System.out.println("PASSED IN TASK: " + task.toString() + "\n" + task.getDueDate()+ "\n" + task.getCreatedAt()+ "\n" + task.getUpdatedAt());
+
         ModelAndView mav = new ModelAndView();
         // check for errors. if yes, return task object
         if (bindings.hasErrors()) {
+            System.out.println("TASK TO BE UPDATED HAS ERRORS: " + task.toString());
             mav.addObject("task", task);
             return mav;
         }
-
-        // if no errors, add Id and Date stamps to the object
-        task.setId(task.generateId());
-        task.setCreatedAt(task.generateCurrentDate());
-        task.setUpdatedAt(task.generateCurrentDate());
-        // add object to database
-        taskService.createTask(task);
-
-        // redirect to listing page
+        // if no errors, update UpdatedAt date
+        System.out.println("TASK TO BE UPDATED: " + task.toString());
+        task.setUpdatedAt(taskService.generateCurrentDate());
+        System.out.println("TASK TO BE UPDATED AFTER CHANGING DATE: " + task.toString());
+        taskService.updateTask(task);
         mav.setViewName("redirect:/list");
         return mav;
     }
+
+
 }

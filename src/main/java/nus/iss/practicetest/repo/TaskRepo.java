@@ -20,13 +20,11 @@ public class TaskRepo {
     HashOperations<String, String, String> hashOps;
 
     // CRUD
-    @SuppressWarnings("null")
     public void createTask(String taskId, String task) {
         hashOps = template.opsForHash();
         hashOps.put(Util.TASK_DB, taskId, task);
     }
 
-    @SuppressWarnings("null")
     public String retrieveTask(String taskId) {
         hashOps = template.opsForHash();
         return hashOps.get(Util.TASK_DB, taskId);
@@ -37,7 +35,6 @@ public class TaskRepo {
         return hashOps.values(Util.TASK_DB);
     }
 
-    @SuppressWarnings("null")
     public void updateTask(String taskId, String task) {
         hashOps = template.opsForHash();
         hashOps.put(Util.TASK_DB, taskId, task);

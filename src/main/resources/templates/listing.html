@@ -79,24 +79,25 @@
           <td th:text="${#strings.capitalize(t.description)}"></td>
           <td th:text="${#dates.format(t.dueDate, 'dd MMM yyyy')}"></td>
           <td th:text="${#strings.capitalize(t.priority)}"></td>
-          <td th:text="${#strings.capitalize(t.status).replaceAll('[^A-Za-z0-9\-]', ' ')}"></td>
+          <td
+            th:text="${#strings.capitalize(t.status).replaceAll('[^A-Za-z0-9\-]', ' ')}"
+          ></td>
           <td th:text="${#dates.format(t.createdAt, 'dd MMM yyyy')}"></td>
           <td th:text="${#dates.format(t.updatedAt, 'dd MMM yyyy')}"></td>
           <td>
-            <form action="/update" method="post">
-              <!-- hidden object here so form knows which object to pass back into post request -->
-              <input type="hidden" th:object="${t}">
-              <button type="submit" class="btn btn-warning btn-sm">
-                Update
-              </button>
-            </form>
+            <a
+              class="btn btn-warning btn-sm"
+              th:href="@{/update/{id}(id=${t.id})}"
+              >Update</a
+            >
           </td>
           <td>
             <form action="/delete" method="post">
-              <!-- hidden object here so form knows which object to pass back into post request -->
-              <button type="submit" class="btn btn-danger btn-sm">
-                Delete
-              </button>
+              <a
+                class="btn btn-danger btn-sm"
+                th:href="@{/delete/{id}(id=${t.id})}"
+                >Delete</a
+              >
             </form>
           </td>
         </tr>

@@ -1,8 +1,11 @@
 package nus.iss.practicetest.service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,6 +74,14 @@ public class TaskService {
         task.setCreatedAt(cDate);
         task.setUpdatedAt(uDate);
         return task;
+    }
+    
+    public String generateId() {
+        return UUID.randomUUID().toString();
+    }
+
+    public Date generateCurrentDate() {
+        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
 }

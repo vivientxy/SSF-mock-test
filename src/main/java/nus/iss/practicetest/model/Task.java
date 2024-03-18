@@ -1,9 +1,6 @@
 package nus.iss.practicetest.model;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -21,7 +18,9 @@ public class Task {
     private Date dueDate;
     private String priority;
     private String status;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date createdAt;
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date updatedAt;
 
     public Task() {
@@ -89,14 +88,6 @@ public class Task {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public String generateId() {
-        return UUID.randomUUID().toString();
-    }
-
-    public Date generateCurrentDate() {
-        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     @Override
