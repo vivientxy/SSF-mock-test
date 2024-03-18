@@ -47,7 +47,7 @@ public class TaskController {
             System.out.println("return underage");
             return mav;
         }
-        mav.setViewName("listing");
+        mav.setViewName("redirect:/list");
         sess.setAttribute("userInfo", loginMap);
         System.out.println("return listing");
         return mav;
