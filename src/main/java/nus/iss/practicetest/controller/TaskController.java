@@ -33,14 +33,22 @@ public class TaskController {
     }
 
     @PostMapping(path = "/login")
-    public ModelAndView processLogin(HttpSession sess, @RequestParam MultiValueMap<String,String> loginMap) {
+    public ModelAndView processLogin(HttpSession sess, @RequestParam MultiValueMap<String, String> loginMap) {
         ModelAndView mav = new ModelAndView();
-        if (loginMap.getFirst("fullname").isEmpty() || loginMap.getFirst("age").isEmpty()) {
+        if (loginMap.getFirst("fullname").isEmpty() ||
+                loginMap.getFirst("age").isEmpty() ||
+                sess == null) {
             mav.setViewName("refused");
             System.out.println("return refused");
             return mav;
         }
+        else if (Integer.parseInt(loginMap.getFirst("age")) < 10) {
+            mav.setViewName("underage");
+            System.out.println("return underage");
+            return mav;
+        }
         mav.setViewName("listing");
+        sess.setAttribute("userInfo", loginMap);
         System.out.println("return listing");
         return mav;
     }
@@ -112,13 +120,12 @@ public class TaskController {
         return mav;
     }
 
-        // for updating tasks (beginning)
-        @GetMapping(path = "/delete/{id}")
-        public ModelAndView deleteTask(HttpSession sess, @PathVariable("id") String id) {
-            ModelAndView mav = new ModelAndView("redirect:/list");
-            taskService.deleteTask(id);
-            return mav;
-        }
-
+    // for updating tasks (beginning)
+    @GetMapping(path = "/delete/{id}")
+    public ModelAndView deleteTask(HttpSession sess, @PathVariable("id") String id) {
+        ModelAndView mav = new ModelAndView("redirect:/list");
+        taskService.deleteTask(id);
+        return mav;
+    }
 
 }
