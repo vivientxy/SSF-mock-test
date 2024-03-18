@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,7 +26,26 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
-    @GetMapping(path = { "/", "/list" })
+    @GetMapping(path = { "/", "/login" })
+    public ModelAndView showLogin(HttpSession sess) {
+        ModelAndView mav = new ModelAndView("login");
+        return mav;
+    }
+
+    @PostMapping(path = "/login")
+    public ModelAndView processLogin(HttpSession sess, @RequestParam MultiValueMap<String,String> loginMap) {
+        ModelAndView mav = new ModelAndView();
+        if (loginMap.getFirst("fullname").isEmpty() || loginMap.getFirst("age").isEmpty()) {
+            mav.setViewName("refused");
+            System.out.println("return refused");
+            return mav;
+        }
+        mav.setViewName("listing");
+        System.out.println("return listing");
+        return mav;
+    }
+
+    @GetMapping(path = "/list")
     public ModelAndView showTaskList(HttpSession sess) {
         ModelAndView mav = new ModelAndView("listing");
         List<Task> taskList = taskService.retrieveTasks();
@@ -54,7 +74,6 @@ public class TaskController {
     @PostMapping(path = "/add")
     public ModelAndView addTask(HttpSession sess, @ModelAttribute @Valid Task task, BindingResult bindings) {
         ModelAndView mav = new ModelAndView();
-        // check for errors. if yes, return task object
         if (bindings.hasErrors()) {
             mav.addObject("task", task);
             return mav;
@@ -65,7 +84,6 @@ public class TaskController {
         task.setUpdatedAt(taskService.generateCurrentDate());
         // add object to database
         taskService.createTask(task);
-        // redirect to listing page
         mav.setViewName("redirect:/list");
         return mav;
     }
@@ -76,30 +94,31 @@ public class TaskController {
         ModelAndView mav = new ModelAndView("update");
         Task task = taskService.retrieveTask(id);
         mav.addObject("task", task);
-        System.out.println("RETRIEVED TASK: " + task.toString() + "\n" + task.getDueDate()+ "\n" + task.getCreatedAt()+ "\n" + task.getUpdatedAt());
         return mav;
     }
 
     // for updating tasks (end)
     @PostMapping(path = "/update")
     public ModelAndView updateTask(HttpSession sess, @ModelAttribute @Valid Task task, BindingResult bindings) {
-        System.out.println("PASSED IN TASK: " + task.toString() + "\n" + task.getDueDate()+ "\n" + task.getCreatedAt()+ "\n" + task.getUpdatedAt());
-
         ModelAndView mav = new ModelAndView();
-        // check for errors. if yes, return task object
         if (bindings.hasErrors()) {
-            System.out.println("TASK TO BE UPDATED HAS ERRORS: " + task.toString());
             mav.addObject("task", task);
             return mav;
         }
         // if no errors, update UpdatedAt date
-        System.out.println("TASK TO BE UPDATED: " + task.toString());
         task.setUpdatedAt(taskService.generateCurrentDate());
-        System.out.println("TASK TO BE UPDATED AFTER CHANGING DATE: " + task.toString());
         taskService.updateTask(task);
         mav.setViewName("redirect:/list");
         return mav;
     }
+
+        // for updating tasks (beginning)
+        @GetMapping(path = "/delete/{id}")
+        public ModelAndView deleteTask(HttpSession sess, @PathVariable("id") String id) {
+            ModelAndView mav = new ModelAndView("redirect:/list");
+            taskService.deleteTask(id);
+            return mav;
+        }
 
 
 }
