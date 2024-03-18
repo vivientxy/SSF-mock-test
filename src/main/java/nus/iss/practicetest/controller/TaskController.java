@@ -70,4 +70,34 @@ public class TaskController {
         mav.setViewName("redirect:/list");
         return mav;
     }
+
+    // for updating tasks (beginning)
+    @GetMapping(path = "/update")
+    public ModelAndView showTaskToUpdate(HttpSession sess, @ModelAttribute @Valid Task task) {
+        ModelAndView mav = new ModelAndView("add");
+        mav.addObject("task", task);
+        return mav;
+    }
+
+    // for updating tasks (end)
+    @PostMapping(path = "/update")
+    public ModelAndView updateTask(HttpSession sess, @ModelAttribute @Valid Task task, BindingResult bindings) {
+        ModelAndView mav = new ModelAndView();
+        // check for errors. if yes, return task object
+        if (bindings.hasErrors()) {
+            mav.addObject("task", task);
+            return mav;
+        }
+
+        // if no errors, add Id and Date stamps to the object
+        task.setId(task.generateId());
+        task.setCreatedAt(task.generateCurrentDate());
+        task.setUpdatedAt(task.generateCurrentDate());
+        // add object to database
+        taskService.createTask(task);
+
+        // redirect to listing page
+        mav.setViewName("redirect:/list");
+        return mav;
+    }
 }

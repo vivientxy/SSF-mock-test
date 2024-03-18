@@ -59,11 +59,11 @@ public class PracticeTestApplication implements CommandLineRunner {
 			JsonObject jObject = jsonArray.get(i).asJsonObject();
 
 			Task task = new Task();
-			task.setId(jObject.get("id").toString());
-			task.setName(jObject.get("name").toString());
-			task.setDescription(jObject.get("description").toString());
-			task.setPriority(jObject.get("priority_level").toString());
-			task.setStatus(jObject.get("status").toString());
+			task.setId(jObject.get("id").toString().replace("\"", ""));
+			task.setName(jObject.get("name").toString().replace("\"", ""));
+			task.setDescription(jObject.get("description").toString().replace("\"", ""));
+			task.setPriority(jObject.get("priority_level").toString().replace("\"", ""));
+			task.setStatus(jObject.get("status").toString().replace("\"", ""));
 
 			String dDateStr = jObject.get("due_date").toString().replace("\"", "");
 			String cDateStr = jObject.get("created_at").toString().replace("\"", "");
