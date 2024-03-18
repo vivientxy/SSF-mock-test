@@ -1,7 +1,11 @@
 package nus.iss.practicetest.model;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.UUID;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.validation.constraints.*;
 
@@ -13,6 +17,7 @@ public class Task {
     @Size(max = 255, message = "Max length for description is 255 characters")
     private String description;
     @FutureOrPresent(message = "Date cannot be in the past")
+    @DateTimeFormat(pattern="yyyy-MM-dd")
     private Date dueDate;
     private String priority;
     private String status;
@@ -88,6 +93,10 @@ public class Task {
 
     public String generateId() {
         return UUID.randomUUID().toString();
+    }
+
+    public Date generateCurrentDate() {
+        return Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant());
     }
 
     @Override

@@ -11,15 +11,6 @@
 
 <body>
 
-    <!-- <div>
-        <select name="filter" id="filter">
-            <option value="1">Pending</option>
-            <option value="2">Started</option>
-            <option value="3">In Progress</option>
-            <option value="4">Completed</option>
-        </select>
-    </div> -->
-
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Status: </a>
@@ -31,7 +22,7 @@
             <div class="collapse navbar-collapse" id="navbarNavDarkDropdown">
                 <ul class="navbar-nav">
                     <li class="nav-item dropdown">
-                        
+
                         <!-- <a 
                             class="nav-link dropdown-toggle" 
                             href="#" 
@@ -49,16 +40,18 @@
                 </ul> -->
 
                         <select class="form-select">
-                            <option value="0">Show All</option>
-                            <option value="1">Pending</option>
-                            <option value="2">Started</option>
-                            <option value="3">In Progress</option>
-                            <option value="4">Completed</option>
+                            <option value="all">Show All</option>
+                            <option value="pending">Pending</option>
+                            <option value="started">Started</option>
+                            <option value="in_progress">In-Progress</option>
+                            <option value="completed">Completed</option>
                         </select>
-
                     </li>
                 </ul>
             </div>
+            <a href="/add">
+                <button type="button" class="btn btn-success">Add Task</button>
+            </a>
         </div>
     </nav>
 
@@ -72,7 +65,7 @@
                 <th>Status</th>
                 <th>Created At</th>
                 <th>Updated At</th>
-                <th>Actions</th>
+                <th colspan="2" align="center">Actions</th>
             </tr>
             <tr th:each="t : ${tasks}">
                 <td th:text="${t.name}"></td>
@@ -82,7 +75,16 @@
                 <td th:text="${t.status}"></td>
                 <td th:text="${#dates.format(t.createdAt, 'dd MMM yyyy')}"></td>
                 <td th:text="${#dates.format(t.updatedAt, 'dd MMM yyyy')}"></td>
-                <td></td>
+                <td>
+                    <a href="/update">
+                        <button type="button" class="btn btn-warning btn-sm">Update</button>
+                    </a>
+                </td>
+                <td>
+                    <a href="/delete">
+                        <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                    </a>
+                </td>
             </tr>
         </table>
     </div>
