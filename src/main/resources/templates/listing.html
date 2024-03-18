@@ -64,43 +64,47 @@
 
     <div>
       <table class="table table-striped">
-        <tr>
-          <th>Name</th>
-          <th>Desription</th>
-          <th>Due Date</th>
-          <th>Priority</th>
-          <th>Status</th>
-          <th>Created At</th>
-          <th>Updated At</th>
-          <th colspan="2" align="center">Actions</th>
-        </tr>
-        <tr th:each="t : ${tasks}">
-          <td th:text="${#strings.capitalize(t.name)}"></td>
-          <td th:text="${#strings.capitalize(t.description)}"></td>
-          <td th:text="${#dates.format(t.dueDate, 'dd MMM yyyy')}"></td>
-          <td th:text="${#strings.capitalize(t.priority)}"></td>
-          <td
-            th:text="${#strings.capitalize(t.status).replaceAll('[^A-Za-z0-9\-]', ' ')}"
-          ></td>
-          <td th:text="${#dates.format(t.createdAt, 'dd MMM yyyy')}"></td>
-          <td th:text="${#dates.format(t.updatedAt, 'dd MMM yyyy')}"></td>
-          <td>
-            <a
-              class="btn btn-warning btn-sm"
-              th:href="@{/update/{id}(id=${t.id})}"
-              >Update</a
-            >
-          </td>
-          <td>
-            <form action="/delete" method="post">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Desription</th>
+            <th>Due Date</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th colspan="2" style="text-align: center">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="t : ${tasks}">
+            <td th:text="${#strings.capitalize(t.name)}"></td>
+            <td th:text="${#strings.capitalize(t.description)}"></td>
+            <td th:text="${#dates.format(t.dueDate, 'dd MMM yyyy')}"></td>
+            <td th:text="${#strings.capitalize(t.priority)}"></td>
+            <td
+              th:text="${#strings.capitalize(t.status).replaceAll('[^A-Za-z0-9\-]', ' ')}"
+            ></td>
+            <td th:text="${#dates.format(t.createdAt, 'dd MMM yyyy')}"></td>
+            <td th:text="${#dates.format(t.updatedAt, 'dd MMM yyyy')}"></td>
+            <td>
               <a
-                class="btn btn-danger btn-sm"
-                th:href="@{/delete/{id}(id=${t.id})}"
-                >Delete</a
+                class="btn btn-warning btn-sm"
+                th:href="@{/update/{id}(id=${t.id})}"
+                >Update</a
               >
-            </form>
-          </td>
-        </tr>
+            </td>
+            <td>
+              <form action="/delete" method="post">
+                <a
+                  class="btn btn-danger btn-sm"
+                  th:href="@{/delete/{id}(id=${t.id})}"
+                  >Delete</a
+                >
+              </form>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
 
