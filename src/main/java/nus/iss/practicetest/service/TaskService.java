@@ -36,6 +36,18 @@ public class TaskService {
         return taskList;
     }
 
+    public List<Task> retrieveFilteredTasks(String status) {
+        List<String> taskListStr = taskRepo.retrieveTasks();
+        List<Task> taskList = new ArrayList<>();
+        for (String taskStr : taskListStr) {
+            Task task = strToTask(taskStr);
+            if (task.getStatus().equals(status)) {
+                taskList.add(task);
+            }
+        }
+        return taskList;
+    }
+
     public void updateTask(Task task) {
         taskRepo.updateTask(task.getId(), task.toString());
     }
